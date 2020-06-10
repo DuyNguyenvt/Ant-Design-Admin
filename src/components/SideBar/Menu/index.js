@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { Collapse, Select } from "antd";
+import * as _ from "lodash";
+import { Collapse } from "antd";
 import {
   FundProjectionScreenOutlined,
   RocketOutlined,
   PartitionOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
 
-import themes from "utils/themes";
-
-// import { } from 'antd';
-// import { SettingOutlined } from '@ant-design/icons';
+// import themes from "utils/themes";
+const { Panel } = Collapse;
 
 const Wrapper = styled.div`
   .ant-collapse {
@@ -22,18 +22,21 @@ const Wrapper = styled.div`
     margin-bottom: 5px;
   }
 
-  /* .ant-collapse-item {
-    background: transparent !important;
-  } */
   .ant-collapse-header {
     color: white !important;
-    /* border: solid 2px; */
     border-radius: 10px !important;
 
     :hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
-    /* border: none !important; */
+    ${({ expandDrawer }) =>
+      expandDrawer
+        ? `
+    `
+        : `
+     padding:  12px 30px 12px 16px!important;
+
+    `}
   }
   .ant-collapse-content {
     background: transparent !important;
@@ -44,10 +47,15 @@ const Wrapper = styled.div`
     padding: 0 !important;
   }
   .ant-collapse-item-active {
-    border: solid 2px white !important;
     border-radius: 8px !important;
-    /* box-shadow: 0px 0px 4px 2px rgba(50, 51, 54, 0.4) !important; */
-    /* box-shadow: 0px 0px 1px 3px rgba(66, 61, 55, 0.1) !important; */
+  }
+
+  .arrow--active {
+    transform: rotate(90deg) !important;
+    transform-origin: right !important;
+  }
+  .arrow--collapse {
+    transition: all 0.2s;
   }
 `;
 
@@ -81,68 +89,87 @@ const PanelHeader = styled.div`
   span {
     font-weight: 700;
   }
+  width: 100%;
+  ${({ expandDrawer }) =>
+    expandDrawer
+      ? `
+    `
+      : `
+    padding: 0!important;
+    display: flex !important;
+    // justify-content: space-between;
+    `}/* border: none !important; */
 `;
 
-const Devider = styled.div`
-  border: solid 2px;
-`;
+// const Devider = styled.div`
+//   border: solid 2px;
+// `;
 
-const { Panel } = Collapse;
+function SidebarMenu(props) {
+  const { expandDrawer } = props;
 
-function SidebarMenu() {
   return (
-    <Wrapper>
+    <Wrapper id="side-bar--menu" expandDrawer={expandDrawer}>
       <DashboardItem>
         <FundProjectionScreenOutlined
           style={{ fontSize: "25px", marginRight: "5px" }}
         />
-        <span>DASHBOARD</span>
+        {expandDrawer && <span>DASHBOARD</span>}
       </DashboardItem>
       <Collapse
         defaultActiveKey={["1"]}
-        // onChange={callback}
-        expandIconPosition={"right"}
+        expandIcon={(panelProps) => {
+          const procClasses = {
+            "arrow--collapse": true,
+            "arrow--active": _.get(panelProps, "isActive"),
+          };
+          if (expandDrawer) return <RightOutlined className={procClasses} />;
+          return null;
+        }}
+        expandIconPosition="right"
       >
         <Panel
           header={
-            <PanelHeader>
+            <PanelHeader expandDrawer={expandDrawer}>
               <RocketOutlined
                 style={{ fontSize: "25px", marginRight: "5px" }}
               />
-              <span> PRODUCTS </span>
+              {expandDrawer && <span> PRODUCTS </span>}
             </PanelHeader>
           }
           key="1"
 
           // extra={genExtra()}
         >
-          <PanelItem>Face Unlock </PanelItem>
-          <PanelItem>
-            Nodejs server for controlling argricultural system
-          </PanelItem>
+          {expandDrawer && (
+            <>
+              <PanelItem>Face Unlock </PanelItem>
+              <PanelItem>
+                Nodejs server for controlling argricultural system
+              </PanelItem>
+            </>
+          )}
         </Panel>
+
         <Panel
           header={
             <PanelHeader>
               <PartitionOutlined
                 style={{ fontSize: "25px", marginRight: "5px" }}
               />
-              <span> CAMPAIGNS </span>
+              {expandDrawer && <span> CAMPAIGNS </span>}
             </PanelHeader>
           }
           key="2"
           // extra={genExtra()}
         >
-          <PanelItem> Face Recognition for restaurent service</PanelItem>
-          <PanelItem> Watering IOT system </PanelItem>
+          {expandDrawer && (
+            <>
+              <PanelItem> Face Recognition for restaurent service</PanelItem>
+              <PanelItem> Watering IOT system </PanelItem>
+            </>
+          )}
         </Panel>
-        {/* <Panel
-          header="SETTINGS"
-          key="3"
-          // extra={genExtra()}
-        >
-          <div>test 3</div>
-        </Panel> */}
       </Collapse>
     </Wrapper>
   );

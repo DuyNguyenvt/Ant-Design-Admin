@@ -1,18 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Row, Col, Drawer, Collapse, Select, Tooltip, Button } from "antd";
-import SidebarMenu from "components/SideBar/Menu";
-import SidebarUser from "components/SideBar/User";
-import { DatabaseOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { Row, Col, Tooltip, Button, Badge, Popover } from "antd";
+// import { Popover, Button } from "antd";
+import {
+  DatabaseOutlined,
+  EllipsisOutlined,
+  UnorderedListOutlined,
+  BellOutlined,
+  GlobalOutlined,
+} from "@ant-design/icons";
 
-import SideBarBg from "images/_sideBar/sidebar-bg.jpg";
 import themes from "utils/themes";
 
-// import { Avatar } from 'antd';
-
-const { Panel } = Collapse;
-const { Option } = Select;
+// import SideBar from "components/SideBar";
 
 const Wrapper = styled.div`
   background: white;
@@ -34,9 +35,11 @@ const Wrapper = styled.div`
       return "width: calc(100vw - 80px);";
     }};
   }
-  .header-ham--wrapper {
+  /* .header-ham--wrapper {
+  } */
+  .header--right-side {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
   }
   .ant-btn {
@@ -48,7 +51,7 @@ const Wrapper = styled.div`
 
 const Bar = styled.div`
   border: solid 1px;
-  margin-bottom: 4px;
+  margin: 4px 0;
   color: rgba(0, 0, 0, 0.85);
   width: 25px;
 `;
@@ -60,10 +63,6 @@ const HambugerBtn = styled.div`
   }
 `;
 
-const SideBar = styled.div`
-  background-image: url(${({ bgImg }) => bgImg});
-`;
-
 const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
@@ -72,43 +71,34 @@ const HeaderTitle = styled.div`
   margin-left: 5px;
 `;
 
-const Devider = styled.div`
-  border: solid 1px;
-  margin-top: 10px;
-  color: white;
+const ControlBtn = styled.div`
+  margin: 0 7px;
 `;
 
-const FooterContent = styled.div``;
-
-const UserContainer = styled.div`
+const ControlGroup = styled.div`
   display: flex;
-  align-items: center;
-  padding: 12px 0;
-`;
-
-const UserName = styled.span`
-  margin-left: 5px;
-  color: white;
-  text-transform: uppercase;
-  font-weight: 800;
+  flex-direction: row;
+  span {
+  }
+  svg {
+    cursor: pointer;
+    :hover {
+      color: #23ccef;
+    }
+  }
 `;
 
 function Header(props) {
   const {
-    windowWidth,
-    drawer,
+    deviceType,
     toggleDrawer,
     expandDrawer,
-    // setMouseEnterDrawer,
-    toggleExpandDrawer,
-    // handleExpandDrawer,
-    mouseEnterDrawer,
     isSmallDrawer,
     changeSmallDrawer,
   } = props;
 
   return (
-    <Wrapper expandedDrawer={expandDrawer}>
+    <Wrapper expandDrawer={expandDrawer}>
       <Row>
         <Col xs={1}>
           <Tooltip title="search">
@@ -127,7 +117,7 @@ function Header(props) {
                   <DatabaseOutlined />
                 )
               }
-              warning
+              // warning
               style={{
                 background: "rgba(255, 147, 23, 0.85)",
                 border: "none",
@@ -142,7 +132,42 @@ function Header(props) {
         <Col xs={6}>
           <HeaderTitle>Dashboard</HeaderTitle>
         </Col>
-        <Col xs={1} offset={16} className="header-ham--wrapper">
+        <Col xs={17} className="header--right-side">
+          {deviceType === "DESKTOP" ? (
+            <ControlGroup>
+              <ControlBtn>
+                <Popover
+                  content={<div> test</div>}
+                  title={null}
+                  trigger="click"
+                >
+                  {/* <Button>Hover me</Button> */}
+                  <GlobalOutlined
+                    style={{
+                      fontSize: "25px",
+                    }}
+                  />
+                </Popover>
+              </ControlBtn>
+              <ControlBtn>
+                <Badge count={5}>
+                  <BellOutlined
+                    style={{
+                      fontSize: "25px",
+                    }}
+                  />
+                </Badge>
+              </ControlBtn>
+              <ControlBtn>
+                <UnorderedListOutlined
+                  style={{
+                    fontSize: "25px",
+                  }}
+                />
+              </ControlBtn>
+            </ControlGroup>
+          ) : null}
+
           <HambugerBtn
             onClick={() => {
               toggleDrawer();
@@ -153,74 +178,17 @@ function Header(props) {
             <Bar />
           </HambugerBtn>
         </Col>
+        <Col xs={1} offset={16}></Col>
       </Row>
-
-      <Drawer
-        id="cus-drawer"
-        title={
-          <div>
-            <div>PRODUCT ADMINISTRATOR</div>
-            <Devider />
-          </div>
-        }
-        placement={windowWidth > 1000 ? "left" : "right"}
-        closable={windowWidth > 1000 ? false : true}
-        onClose={() => {
-          toggleDrawer(!drawer);
-        }}
-        visible={windowWidth > 1000 ? true : drawer}
-        width={(function () {
-          if (windowWidth > 1000) {
-            if (expandDrawer || mouseEnterDrawer) {
-              return 256;
-            }
-            return 100;
-          }
-          if (windowWidth <= 1000 && drawer) {
-            return 256;
-          }
-          return 0;
-        })()}
-        key={"top"}
-        mask={false}
-        drawerStyle={{
-          backgroundImage: `url(${SideBarBg})`,
-        }}
-        bodyStyle={{
-          background:
-            "linear-gradient(to right,rgba(241, 152, 57, 0.85),rgba(255, 147, 23, 0.85)) ",
-        }}
-        footer={
-          <FooterContent>
-            <Devider />
-            <SidebarUser />
-            {/* <UserContainer>
-              <Avatar size={40} icon={<UserOutlined />} />
-              <UserName>Admin</UserName>
-            </UserContainer> */}
-          </FooterContent>
-        }
-        onMouseEnter={() => {
-          if (isSmallDrawer && !expandDrawer) {
-            toggleExpandDrawer(expandDrawer);
-          }
-          //   setMouseEnterDrawer(true);
-          //   handleExpandDrawer(false);
-        }}
-        onMouseLeave={() => {
-          //   handleExpandDrawer(true);
-          //   setMouseEnterDrawer(false);
-          if (isSmallDrawer && expandDrawer) {
-            toggleExpandDrawer(expandDrawer);
-          }
-        }}
-      >
-        <SideBar>
-          <SidebarMenu />
-        </SideBar>
-      </Drawer>
     </Wrapper>
   );
 }
+
+Header.propTypes = {
+  toggleDrawer: PropTypes.func,
+  expandDrawer: PropTypes.bool,
+  isSmallDrawer: PropTypes.bool,
+  changeSmallDrawer: PropTypes.func,
+};
 
 export default Header;

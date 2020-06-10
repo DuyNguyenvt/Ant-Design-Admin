@@ -17,7 +17,6 @@ body {
 }
 
 #root {
-  // min-height: calc(100vh - 100px);
 }
 
 code {
@@ -42,15 +41,7 @@ ul {
   }
 }
 
-.ant-drawer-header {
-  // background: transparent !important;
-}
 .ant-drawer {
-  // transition: width 2s, height 4s !important;
-  // :hover {
-  //   // min-width: 256px !important;
-  //   width: 265px !important;
-  // }
 }
 
 .ant-drawer-header {
@@ -60,11 +51,12 @@ ul {
     rgba(255, 147, 23, 0.85)
   ) !important;
   border: none !important;
-  padding: 12px 32px !important;
+  padding: 12px 12px 0 12px !important;
   // overflow: hidden !important;
 }
 .ant-drawer-body {
   overflow: hidden !important;
+  padding: 12px !important;
 }
 .ant-drawer-footer {
   background: linear-gradient(
@@ -73,7 +65,8 @@ ul {
     rgba(255, 147, 23, 0.85)
   ) !important;
   border: none !important;
-  padding: 16px 32px !important;
+  padding: 0 10px !important;
+  // padding: 16px 32px !important;
 }
 
 .ant-drawer-title {
@@ -83,7 +76,7 @@ ul {
 
 @keyframes expand {
   from {
-    width: 100px;
+    width: 80px;
   }
   to {
     width: 256px;
@@ -95,13 +88,13 @@ ul {
     width: 256px;
   }
   to {
-    width: 100px;
+    width: 80px;
   }
 }
 
 .ant-drawer--animate-expand {
-  animation: expand 0.5s 1;
+  animation: expand 0.3s 1 ease;
 }
 .ant-drawer--animate-unexpand {
-  animation: unexpand 0.5s 1;
+  animation: unexpand 0.3s 1 ease;
 }

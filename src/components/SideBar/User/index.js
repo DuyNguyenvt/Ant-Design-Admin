@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import * as _ from "lodash";
 import { Collapse, Avatar } from "antd";
 import {
-  FundProjectionScreenOutlined,
-  RocketOutlined,
-  PartitionOutlined,
+  // FundProjectionScreenOutlined,
+  // RocketOutlined,
+  // PartitionOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
 
-import themes from "utils/themes";
+// import themes from "utils/themes";
 import { UserOutlined } from "@ant-design/icons";
 
 // import { } from 'antd';
@@ -23,18 +25,14 @@ const Wrapper = styled.div`
     margin-bottom: 5px;
   }
 
-  /* .ant-collapse-item {
-    background: transparent !important;
-  } */
   .ant-collapse-header {
     color: white !important;
-    /* border: solid 2px; */
+
     border-radius: 10px !important;
 
     :hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
-    /* border: none !important; */
   }
   .ant-collapse-content {
     background: transparent !important;
@@ -45,11 +43,15 @@ const Wrapper = styled.div`
     padding: 0 !important;
   }
   .ant-collapse-item-active {
-    border: solid 2px white !important;
     border-width: 0 2px 2px 2px !important;
     border-radius: 0 0 8px 8px !important;
-    /* box-shadow: 0px 0px 4px 2px rgba(50, 51, 54, 0.4) !important; */
-    /* box-shadow: 0px 0px 1px 3px rgba(66, 61, 55, 0.1) !important; */
+  }
+  .arrow--active {
+    transform: rotate(90deg) !important;
+    transform-origin: right !important;
+  }
+  .arrow--collapse {
+    transition: all 0.2s;
   }
 `;
 
@@ -85,20 +87,30 @@ const UserName = styled.span`
 
 const { Panel } = Collapse;
 
-function SidebarUser() {
+function SidebarUser(props) {
+  const { expandDrawer } = props;
   return (
     <Wrapper id="side-bar--user">
       <Collapse
         // defaultActiveKey={["1"]}
         // onChange={callback}
-        expandIconPosition={"right"}
+        defaultActiveKey={["1"]}
+        expandIcon={(panelProps) => {
+          const procClasses = {
+            "arrow--collapse": true,
+            "arrow--active": _.get(panelProps, "isActive"),
+          };
+          if (expandDrawer) return <RightOutlined className={procClasses} />;
+          return null;
+        }}
+        expandIconPosition="right"
       >
         <Panel
           header={
             <PanelHeader>
               <UserContainer>
-                <Avatar size={40} icon={<UserOutlined />} />
-                <UserName>Admin</UserName>
+                <Avatar size={30} icon={<UserOutlined />} />
+                {expandDrawer && <UserName>Admin</UserName>}
               </UserContainer>
             </PanelHeader>
           }
@@ -106,8 +118,12 @@ function SidebarUser() {
 
           // extra={genExtra()}
         >
-          <PanelItem>Edit Info </PanelItem>
-          <PanelItem>Settings</PanelItem>
+          {expandDrawer && (
+            <>
+              <PanelItem>Edit Info </PanelItem>
+              <PanelItem>Settings</PanelItem>
+            </>
+          )}
         </Panel>
       </Collapse>
     </Wrapper>
