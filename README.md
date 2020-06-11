@@ -1,12 +1,6 @@
-## MY PORTFOLIO
+## ADMIN DASHBOARD BASED ANT-DESIGN
 
-1. Reactjs, redux, redux-saga, styled-components, scss.
-2. Deployed with heroku.
-3. My VPS hosting expired a month ago. Heroku is absolutely not bad solution to cut cost.
-
-## Heroku deployed page
-
-https://portfolio-app-duy-nguyen.herokuapp.com/
+Reactjs, redux, redux-saga, styled-components, scss, ....
 
 ## Available Scripts
 
